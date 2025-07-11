@@ -71,7 +71,7 @@ main (void) {
 	char **argv;
 
 	/* Clear BSS and get machine's RAM size. */
-	                     bss_init ();
+	bss_init ();
 
 	/* Break command line into arguments and parse options. */
 	argv = read_command_line ();
