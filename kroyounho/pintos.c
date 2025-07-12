@@ -139,8 +139,7 @@ static void paging_init(uint64_t mem_end) {
 static char **read_command_line(void) {
   static char *argv[LOADER_ARGS_LEN / 2 + 1];
   char *p = ptov(LOADER_ARGS);
-  const char *end =
-      p + LOADER_ARGS_LEN; // cppcheck-suppress constVariablePointer
+  const char *const end = p + LOADER_ARGS_LEN;
   int argc = *(uint32_t *)ptov(LOADER_ARG_CNT);
   int i;
 
