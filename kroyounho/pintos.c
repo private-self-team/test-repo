@@ -1,4 +1,17 @@
+#include "devices/input.h"
+#include "devices/kbd.h"
+#include "devices/serial.h"
+#include "devices/timer.h"
+#include "devices/vga.h"
 #include "threads/init.h"
+#include "threads/interrupt.h"
+#include "threads/io.h"
+#include "threads/loader.h"
+#include "threads/malloc.h"
+#include "threads/mmu.h"
+#include "threads/palloc.h"
+#include "threads/pte.h"
+#include "threads/thread.h"
 #include <console.h>
 #include <debug.h>
 #include <limits.h>
@@ -8,23 +21,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "devices/kbd.h"
-#include "devices/input.h"
-#include "devices/serial.h"
-#include "devices/timer.h"
-#include "devices/vga.h"
-#include "threads/interrupt.h"
-#include "threads/io.h"
-#include "threads/loader.h"
-#include "threads/malloc.h"
-#include "threads/mmu.h"
-#include "threads/palloc.h"
-#include "threads/pte.h"
-#include "threads/thread.h"
 #ifdef USERPROG
-#include "userprog/process.h"
 #include "userprog/exception.h"
 #include "userprog/gdt.h"
+#include "userprog/process.h"
 #include "userprog/syscall.h"
 #include "userprog/tss.h"
 #endif
@@ -54,7 +54,7 @@ static char **parse_options(char **argv);
 static void run_actions(char **argv);
 static void usage(void);
 static void print_stats(void);
-static void power_off(void);  // static 처리 완료
+static void power_off(void); // static 처리 완료
 
 int main(void) NO_RETURN;
 
@@ -110,7 +110,9 @@ int main(void) {
 
 static void bss_init(void) {
   extern char _start_bss, _end_bss;
-  memset(&_start_bss, 0, (uintptr_t)&_end_bss - (uintptr_t)&_start_bss); // 포인터 빼기 문제 해결
+  memset(&_start_bss, 0,
+         (uintptr_t)&_end_bss -
+             (uintptr_t)&_start_bss); // 포인터 빼기 문제 해결
 }
 
 static void paging_init(uint64_t mem_end) {
@@ -137,7 +139,8 @@ static void paging_init(uint64_t mem_end) {
 static char **read_command_line(void) {
   static char *argv[LOADER_ARGS_LEN / 2 + 1];
   char *p = ptov(LOADER_ARGS);
-  char *end = p + LOADER_ARGS_LEN; // cppcheck-suppress constVariablePointer
+  const char *end =
+      p + LOADER_ARGS_LEN; // cppcheck-suppress constVariablePointer
   int argc = *(uint32_t *)ptov(LOADER_ARG_CNT);
   int i;
 
@@ -218,11 +221,8 @@ static void run_actions(char **argv) {
   static const struct action actions[] = {
       {"run", 2, run_task},
 #ifdef FILESYS
-      {"ls", 1, fsutil_ls},
-      {"cat", 2, fsutil_cat},
-      {"rm", 2, fsutil_rm},
-      {"put", 2, fsutil_put},
-      {"get", 2, fsutil_get},
+      {"ls", 1, fsutil_ls},   {"cat", 2, fsutil_cat}, {"rm", 2, fsutil_rm},
+      {"put", 2, fsutil_put}, {"get", 2, fsutil_get},
 #endif
       {NULL, 0, NULL},
   };
