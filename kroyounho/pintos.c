@@ -54,7 +54,7 @@ static char **parse_options(char **argv);
 static void run_actions(char **argv);
 static void usage(void);
 static void print_stats(void);
-static void power_off(void);  // 변경된 선언 (static)
+static void power_off(void);  // static 처리 완료
 
 int main(void) NO_RETURN;
 
@@ -110,7 +110,7 @@ int main(void) {
 
 static void bss_init(void) {
   extern char _start_bss, _end_bss;
-  memset(&_start_bss, 0, (uintptr_t)&_end_bss - (uintptr_t)&_start_bss); // 수정됨
+  memset(&_start_bss, 0, (uintptr_t)&_end_bss - (uintptr_t)&_start_bss); // 포인터 빼기 문제 해결
 }
 
 static void paging_init(uint64_t mem_end) {
@@ -136,14 +136,11 @@ static void paging_init(uint64_t mem_end) {
 
 static char **read_command_line(void) {
   static char *argv[LOADER_ARGS_LEN / 2 + 1];
-  char *p;
-  const char *end; // const 추가됨
-  int argc;
+  char *p = ptov(LOADER_ARGS);
+  char *end = p + LOADER_ARGS_LEN; // cppcheck-suppress constVariablePointer
+  int argc = *(uint32_t *)ptov(LOADER_ARG_CNT);
   int i;
 
-  argc = *(uint32_t *)ptov(LOADER_ARG_CNT);
-  p = ptov(LOADER_ARGS);
-  end = p + LOADER_ARGS_LEN;
   for (i = 0; i < argc; i++) {
     if (p >= end)
       PANIC("command line arguments overflow");
