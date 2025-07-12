@@ -215,7 +215,7 @@ static void run_actions(char **argv) {
     char *name;
     int argc;
     void (*function)(char **argv);
-  };
+  }; 
 
   static const struct action actions[] = {
       {"run", 2, run_task},
