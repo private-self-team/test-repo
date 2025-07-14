@@ -128,6 +128,8 @@ static void paging_init(uint64_t mem_end) {
     if ((uint64_t)&start <= va && va < (uint64_t)&_end_kernel_text)
       perm &= ~PTE_W;
     // newnew
+    //sadfsadfsadf
+
     uint64_t *pte = pml4e_walk(pml4, va, 1);
     if (pte != NULL)
       *pte = pa | perm;
