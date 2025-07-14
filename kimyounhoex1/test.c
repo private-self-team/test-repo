@@ -4,7 +4,7 @@ int main()
                     { 
   printf("hello, world");
   printf("hello, world");
-  //아 개빡치네
+  //아 개빡치네씨발
           
   return 0;
 }
