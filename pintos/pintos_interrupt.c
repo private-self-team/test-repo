@@ -16,7 +16,7 @@
 #endif
 
 /* Number of x86_64 interrupts. */
-#define INTR_CNT 256 
+#define INTR_CNT 256  
 
 /* Creates an gate that invokes FUNCTION.
 
