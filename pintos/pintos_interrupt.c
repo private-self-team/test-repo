@@ -115,7 +115,7 @@ enum intr_level intr_get_level(void) {
      Interrupts". */
   asm volatile("pushfq; popq %0" : "=g"(flags));
 
-  return flags & FLAG_IF ? INTR_ON : INTR_OFF;
+  return (flags & FLAG_IF) ? INTR_ON : INTR_OFF;
 }
 
 /* Enables or disables interrupts as specified by LEVEL and
