@@ -1,8 +1,10 @@
 #include <stdio.h>
 
 int main() 
-{
-  printf("hello, world3");
+        {
+  int a = 5;
+  int b;
+  printf("hello, worldasdfasdf3");
   printf("hello, world3");  
   /////////////////////asdfasdfasdf
   // newnewnewnewnewnewnewnew
